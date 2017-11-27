@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace ShellProgress
+﻿namespace ShellProgress
 {
     public interface IProgressing
     {
-        void Update(Int32 completed);
+        void Update(int completed);
 
         void Complete();
     }

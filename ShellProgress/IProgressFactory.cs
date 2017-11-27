@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace ShellProgress
+﻿namespace ShellProgress
 {
     public interface IProgressFactory
     {
-        IProgressing CreateInstance(Int32 maxValue);
+        IProgressing CreateInstance(int maxValue, bool showProgressValues = false);
     }
 }

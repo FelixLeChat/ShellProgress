@@ -4,36 +4,38 @@ namespace ShellProgress
 {
     public class ProgressBar : IProgressing
     {
-        private readonly Int32 maxValue;
+        private readonly int maxValue;
+        private readonly bool showProgressValues;
 
-        public ProgressBar(Int32 maxValue)
+        public ProgressBar(int maxValue, bool showProgressValues)
         {
             if (maxValue <= 0)
-                throw new ArgumentException("Max value should be greater than zero.", "maxValue");
+                throw new ArgumentException("Max value should be greater than zero.", nameof(maxValue));
 
             this.maxValue = maxValue;
-            BarSize = 10;
-            ProgressCharacter = '.';
+            this.showProgressValues = showProgressValues;
+            this.BarSize = 10;
+            this.ProgressCharacter = '.';
         }
 
-        public Int32 BarSize { get; set; }
+        public int BarSize { get; set; }
 
-        public Char ProgressCharacter { get; set; }
+        public char ProgressCharacter { get; set; }
 
         public void Update(int completed)
         {
             Console.CursorVisible = false;
-            int left = Console.CursorLeft;
-            decimal perc = (decimal)completed / (decimal)maxValue;
-            int chars = (int)Math.Floor(perc / ((decimal)1 / (decimal)BarSize));
-            string p1 = String.Empty, p2 = String.Empty;
+            var left = Console.CursorLeft;
+            var perc = completed / (decimal) this.maxValue;
+            var chars = (int)Math.Floor(perc / (1 / (decimal) this.BarSize));
+            string p1 = string.Empty, p2 = string.Empty;
 
             Console.Write('[');
 
-            for (int i = 0; i < chars; i++)
-                p1 += ProgressCharacter;
-            for (int i = 0; i < BarSize - chars; i++)
-                p2 += ProgressCharacter;
+            for (var i = 0; i < chars; i++)
+                p1 += this.ProgressCharacter;
+            for (var i = 0; i < this.BarSize - chars; i++)
+                p2 += this.ProgressCharacter;
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(p1);
@@ -42,13 +44,17 @@ namespace ShellProgress
 
             Console.ResetColor();
             Console.Write(']');
-            Console.Write(" {0}%", (perc * 100).ToString("N2"));
+            Console.Write(" {0:N2}%", perc * 100);
+            if (this.showProgressValues)
+            {
+                Console.Write($"{completed} / {this.maxValue}");
+            }
             Console.CursorLeft = left;
         }
 
         public void Complete()
         {
-            Update(maxValue);
+            this.Update(this.maxValue);
             Console.Write(Environment.NewLine);
         }
     }
