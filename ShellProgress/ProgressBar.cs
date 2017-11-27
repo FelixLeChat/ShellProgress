@@ -47,7 +47,7 @@ namespace ShellProgress
             Console.Write(" {0:N2}%", perc * 100);
             if (this.showProgressValues)
             {
-                Console.Write($"{completed} / {this.maxValue}");
+                Console.Write($" ({completed} / {this.maxValue})");
             }
             Console.CursorLeft = left;
         }
